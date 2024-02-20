@@ -13,9 +13,14 @@ inputs:
       Method of storing old message ids to delete
       one of:
       - none - doesn't store ids of sent messages
+      - artifact - stores ids in artifact file
       - git - stores ids in git repository
     default: none
     required: true
+  artifact_retentionDays:
+    description: |-
+      if artifact is selected as storageMethod,
+      number of retentionDays for artifact
 
 runs:
   using: node20
