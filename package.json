@@ -1,0 +1,21 @@
+{
+  "name": "action-discord-md-publish",
+  "version": "0.0.1",
+  "description": "Sends markdown file to discord as message using webhooks",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build -s ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wroclaw",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/exec": "^1.1.1",
+    "discord.js": "^14.14.1"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.1",
+    "typescript": "^5.3.3"
+  }
+}

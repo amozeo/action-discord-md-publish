@@ -1,0 +1,22 @@
+name: "Publish markdown to Discord"
+description: "Send markdown file to Discord as message using webhook"
+
+inputs:
+  file:
+    description: "Which file to send"
+    required: true
+  webhook:
+    description: "Discord webhook url to use"
+    required: true
+  storageMethod:
+    description: |-
+      Method of storing old message ids to delete
+      one of:
+      - none - doesn't store ids of sent messages
+      - git - stores ids in git repository
+    default: none
+    required: true
+
+runs:
+  using: node20
+  main: dist/index.js
