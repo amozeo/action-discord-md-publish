@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 
 import * as core from "@actions/core";
 import { exec as _exec, type ExecOptions } from "@actions/exec";
+import { WebhookClient } from "discord.js";
 
 function exec(command: string, options?: ExecOptions) {
   const splitted = command.trim().split(/ +/g);
@@ -12,6 +13,12 @@ function exec(command: string, options?: ExecOptions) {
 
 function getStorageMethod(): string {
   return core.getInput("storageMethod", {required: true})
+}
+
+function getStorageWebhook(): WebhookClient {
+  return new WebhookClient({
+    url: core.getInput("storageWebhookUrl", { required: true }),
+  });
 }
 
 /** @returns array of messageIDs */
@@ -29,12 +36,20 @@ export async function getMessageIDs(): Promise<string[]> {
           core.warning("Continuing anyway");
           return [];
         })
+    case "webhook":
+      return getStorageWebhook()
+        .fetchMessage(core.getInput("storageWebhookMessageID"))
+        .then(v => v.content.split(", "))
+        .catch(e => {
+          core.warning("Couldn't read messageIDs");
+          return [];
+        });
     default:
       throw new Error(`Storage method is unknown: ${method}`);
   }
 }
 
-export async function pushMessageIDs() {
+export async function pushMessageIDs(messageIDs: string[]) {
   const method = getStorageMethod();
   switch (method) {
     case "git":
@@ -51,6 +66,26 @@ export async function pushMessageIDs() {
       return true;
     case "none":
       return false;
+    case "webhook":
+      const content = messageIDs.join(", ");
+      try {
+        const id = core.getInput("storageWebhookMessageID");
+        if (id === "" || isNaN(Number(id)))
+          throw new Error("Invalid argument provided for storageWebhookMessageID");
+        await getStorageWebhook().editMessage(
+          core.getInput("storageWebhookMessageID"),
+          content
+        )
+        core.info("Message for storage edited!")
+      }
+      catch (e) {
+        core.warning("Couldn't edit storage message");
+        core.warning(e as Error);
+        core.warning("Sending a new storage message");
+        const message = await getStorageWebhook().send(messageIDs.join(", "));
+        core.info(`Message for storage sent! ID: ${message.id}`);
+      }
+      return true;
     default:
       throw new Error(`Storage method is unknown: ${method}`);
   }

@@ -102,7 +102,7 @@ async function main() {
   await fs.writeFile(core.getInput("outputFileLocation"), messageIDsConcatenated);
   
   await Promise.all([
-    storage.pushMessageIDs(),
+    storage.pushMessageIDs(messageIDs),
     presentMessageIds.map(v => client.deleteMessage(v)),
     ].flat()
   );

@@ -17,10 +17,15 @@ inputs:
       one of:
       - none - doesn't store ids of sent messages
       - git - stores ids in git repository
+      - webhook - stores in message sent by another webhook
     default: none
     required: true
   storegeGitFileLocation:
     description: "Where in git repository file should be saved"
+  storageWebhookUrl:
+    description: "Webhook url used to send and read message containing messageIDs"
+  storageWebhookMessageID:
+    description: "Message ID to read and edit"
 
 runs:
   using: node20
