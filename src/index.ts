@@ -49,6 +49,7 @@ async function main() {
   if (presentMessages.length !== messageBlocks.length) {
     core.info("number of message blocks is different, sending messages");
     core.debug(`read "blocks": ${messageBlocks.length}, number of read messages: ${presentMessages.length}`);
+    shouldPostMessages = true;
   }
   if (!shouldPostMessages) for (let i = 0; i < messageBlocks.length; i++) {
     // FIXME: discord may strip special unicode characters, making strings different
