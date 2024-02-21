@@ -8,6 +8,9 @@ inputs:
   webhook:
     description: "Discord webhook url to use"
     required: true
+  outputFileLocation:
+    description: "Where to write a file containing current message ids for this run"
+    default: "./messageIDs.txt"
   storageMethod:
     description: |-
       Method of storing old message ids to delete
@@ -16,6 +19,8 @@ inputs:
       - git - stores ids in git repository
     default: none
     required: true
+  storegeGitFileLocation:
+    description: "Where in git repository file should be saved"
 
 runs:
   using: node20

@@ -98,7 +98,7 @@ async function main() {
 
   const messageIDsConcatenated = messageIDs.join("\n");
   core.info(`Messages sent! IDs:\n${messageIDsConcatenated}`);
-  await fs.writeFile("./messageIDs.txt", messageIDsConcatenated);
+  await fs.writeFile(core.getInput("outputFileLocation"), messageIDsConcatenated);
   
   await Promise.all([
     storage.pushMessageIDs(),
